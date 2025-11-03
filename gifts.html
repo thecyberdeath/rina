@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>bday 🎁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #E6E6FA;
+      margin: 0;
+      text-align: center;
+      color: #4B3B61;
+    }
+    h1 {
+      margin-top: 2rem;
+      color: #6A5ACD;
+    }
+    .gifts {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 2rem auto;
+      flex-wrap: wrap;
+    }
+    .gift {
+      width: 100px;
+      height: 100px;
+      background: #FADADD;
+      border: 3px solid #A8C3A0;
+      border-radius: 16px;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .gift:hover {
+      transform: scale(1.05);
+    }
+    .gift.opened {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 90%;
+      text-align: center;
+    }
+    #bonus {
+      display: none;
+      margin-top: 2rem;
+    }
+    button {
+      background: #A8C3A0;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+    img.note-img {
+      max-width: 280px;
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ほらほら〜、プレゼント選んで〜💕🎁</h1>
+
+  <div class="gifts" id="giftContainer">
+    <div class="gift" onclick="openGift(0)">🎁</div>
+    <div class="gift" onclick="openGift(1)">🎁</div>
+    <div class="gift" onclick="openGift(2)">🎁</div>
+  </div>
+
+  <div id="modal">
+    <div class="modal-content" id="modalContent">
+      <!-- Dynamic content here -->
+    </div>
+  </div>
+
+  <div id="bonus">
+    <h2>🎉おまけプレゼント〜！✨</h2>
+    <p>３つ全部開けたの？えへへ〜あったかいコーヒーどうぞ💕☕</p>
+    <video width="180" autoplay loop muted>
+      <source src="coffee.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <script>
+  const gifts = document.querySelectorAll('.gift');
+  const modal = document.getElementById('modal');
+  const modalContent = document.getElementById('modalContent');
+  const bonus = document.getElementById('bonus');
+
+  let openedGifts = [false, false, false];
+
+  function openGift(index) {
+    modal.style.display = 'flex';
+    modalContent.innerHTML = `
+      <h2>はいっ、プレゼントだよ〜！</h2>
+      <img src="puzzle${index + 1}.jpg" class="note-img">
+      <br><button onclick="showRealGift(${index})">Continue</button>
+    `;
+  }
+
+  function showRealGift(index) {
+    let media = '';
+    if (index === 0) {
+      // First gift: bouquet video autoplay loop
+      media = `
+        <video width="260" autoplay loop muted>
+          <source src="bouquet.mp4" type="video/mp4">
+          Your browser does not support video.
+        </video>
+      `;
+    } else if (index === 1) {
+      // Second gift: song with controls
+      media = `
+        <video width="260" controls>
+          <source src="song.mp4" type="video/mp4">
+          Your browser does not support video.
+        </video>
+      `;
+    } else if (index === 2) {
+      // Third gift: letter image
+      media = `
+        <img src="letter.jpg" alt="Letter" class="note-img">
+      `;
+    }
+
+    modalContent.innerHTML = `
+      <h2>フフッ、これが本当のプレゼントさ.🎁</h2>
+      ${media}
+      <br><button onclick="closeGift(${index})">Continue</button>
+    `;
+  }
+
+  function closeGift(index) {
+    modal.style.display = 'none';
+    openedGifts[index] = true;
+    gifts[index].classList.add('opened');
+
+    if (openedGifts.every(g => g)) {
+      bonus.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
